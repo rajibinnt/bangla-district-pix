@@ -79,6 +79,40 @@ const raw: Array<{ name: string; bangla: string; x: number; y: number; division:
   { name: "Rangpur", bangla: "রংপুর", x: 417, y: 393, division: "Rangpur" },
 ];
 
+const districtImages: Record<string, string[]> = {
+  "Dhaka": [
+    "https://images.unsplash.com/photo-1617143207675-e7e6371f5f5e?w=800",
+    "https://images.unsplash.com/photo-1609948543911-7375e6a36453?w=800",
+    "https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?w=800",
+    "https://images.unsplash.com/photo-1622279488067-3a4ab3e1f0e8?w=800",
+    "https://images.unsplash.com/photo-1596895111956-bf1cf0599ce5?w=800",
+  ],
+  "Chittagong": [
+    "https://images.unsplash.com/photo-1596402184320-417e7178b2cd?w=800",
+    "https://images.unsplash.com/photo-1609766856923-7e0a9a5d1f65?w=800",
+    "https://images.unsplash.com/photo-1590579491624-f98f36d4c763?w=800",
+  ],
+  "Cox's Bazar": [
+    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800",
+    "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800",
+    "https://images.unsplash.com/photo-1473116763249-2faaef81ccda?w=800",
+    "https://images.unsplash.com/photo-1506953823976-52e1fdc0149a?w=800",
+  ],
+  "Sylhet": [
+    "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800",
+    "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800",
+    "https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=800",
+  ],
+  "Rajshahi": [
+    "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800",
+    "https://images.unsplash.com/photo-1590579491624-f98f36d4c763?w=800",
+  ],
+  "Rangpur": [
+    "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800",
+    "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800",
+  ],
+};
+
 export const districts: District[] = raw.map((d) => ({
   id: d.name.toLowerCase().replace(/['\s]/g, "-"),
   name: d.name,
@@ -86,7 +120,7 @@ export const districts: District[] = raw.map((d) => ({
   x: (d.x / VB_W) * 100,
   y: (d.y / VB_H) * 100,
   division: d.division,
-  images: [],
+  images: districtImages[d.name] || [],
 }));
 
 export const getDistrict = (id: string): District | undefined =>
