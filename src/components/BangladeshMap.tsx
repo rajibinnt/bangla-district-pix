@@ -7,6 +7,9 @@ interface BangladeshMapProps {
   highlightDistricts?: string[];
 }
 
+const SVG_VB_W = 1655.4;
+const SVG_VB_H = 2224.5;
+
 const BangladeshMap = ({ highlightDistricts }: BangladeshMapProps) => {
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -14,6 +17,21 @@ const BangladeshMap = ({ highlightDistricts }: BangladeshMapProps) => {
   const [hoveredDistrict, setHoveredDistrict] = useState<District | null>(null);
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
   const [svgLoaded, setSvgLoaded] = useState(false);
+  const [svgRect, setSvgRect] = useState<{ left: number; top: number; width: number; height: number } | null>(null);
+
+  const updateSvgRect = useCallback(() => {
+    if (!svgContainerRef.current) return;
+    const svgEl = svgContainerRef.current.querySelector("svg");
+    if (!svgEl) return;
+    const containerRect = svgContainerRef.current.getBoundingClientRect();
+    const svgBBox = svgEl.getBoundingClientRect();
+    setSvgRect({
+      left: svgBBox.left - containerRect.left,
+      top: svgBBox.top - containerRect.top,
+      width: svgBBox.width,
+      height: svgBBox.height,
+    });
+  }, []);
 
   useEffect(() => {
     fetch("/bangladesh-map.svg")
@@ -71,8 +89,16 @@ const BangladeshMap = ({ highlightDistricts }: BangladeshMapProps) => {
           });
         }
         setSvgLoaded(true);
+        // Wait for render then measure
+        requestAnimationFrame(() => updateSvgRect());
       });
-  }, []);
+  }, [updateSvgRect]);
+
+  useEffect(() => {
+    if (!svgLoaded) return;
+    window.addEventListener("resize", updateSvgRect);
+    return () => window.removeEventListener("resize", updateSvgRect);
+  }, [svgLoaded, updateSvgRect]);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (!containerRef.current) return;
@@ -95,39 +121,45 @@ const BangladeshMap = ({ highlightDistricts }: BangladeshMapProps) => {
         style={{ minHeight: "350px" }}
       />
 
-      {svgLoaded && (
+      {svgLoaded && svgRect && (
         <div className="absolute inset-0 pointer-events-none">
           <div className="relative w-full max-w-2xl mx-auto h-full">
-            {visibleDistricts.map((district) => (
-              <motion.button
-                key={district.id}
-                className="absolute pointer-events-auto z-10"
-                style={{
-                  left: `${district.x}%`,
-                  top: `${district.y}%`,
-                  transform: "translate(-50%, -50%)",
-                }}
-                onMouseEnter={() => setHoveredDistrict(district)}
-                onMouseLeave={() => setHoveredDistrict(null)}
-                onClick={() => navigate(`/district/${district.id}`)}
-                whileHover={{ scale: 1.5 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <div className="relative">
-                  <div
-                    className="w-3 h-3 rounded-full border border-primary/50"
-                    style={{ backgroundColor: divisionColors[district.division] }}
-                  />
-                  <div
-                    className="absolute inset-0 rounded-full dot-pulse"
-                    style={{
-                      backgroundColor: divisionColors[district.division],
-                      opacity: 0.4,
-                    }}
-                  />
-                </div>
-              </motion.button>
-            ))}
+            {visibleDistricts.map((district) => {
+              // Convert viewBox coords to pixel position within the SVG rendered area
+              const pxX = svgRect.left + (district.x / 100) * SVG_VB_W / SVG_VB_W * svgRect.width;
+              const pxY = svgRect.top + (district.y / 100) * SVG_VB_H / SVG_VB_H * svgRect.height;
+
+              return (
+                <motion.button
+                  key={district.id}
+                  className="absolute pointer-events-auto z-10"
+                  style={{
+                    left: `${pxX}px`,
+                    top: `${pxY}px`,
+                    transform: "translate(-50%, -50%)",
+                  }}
+                  onMouseEnter={() => setHoveredDistrict(district)}
+                  onMouseLeave={() => setHoveredDistrict(null)}
+                  onClick={() => navigate(`/district/${district.id}`)}
+                  whileHover={{ scale: 1.5 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <div className="relative">
+                    <div
+                      className="w-3 h-3 rounded-full border border-primary/50"
+                      style={{ backgroundColor: divisionColors[district.division] }}
+                    />
+                    <div
+                      className="absolute inset-0 rounded-full dot-pulse"
+                      style={{
+                        backgroundColor: divisionColors[district.division],
+                        opacity: 0.4,
+                      }}
+                    />
+                  </div>
+                </motion.button>
+              );
+            })}
           </div>
         </div>
       )}

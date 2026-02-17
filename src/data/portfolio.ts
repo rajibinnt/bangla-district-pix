@@ -7,12 +7,18 @@ export const portfolioData = {
   email: "rajibbinalam@gmail.com",
   phone: "01767740561",
   resumeUrl: "https://rajibbinalam.netlify.app/files/RAJIB_BIN_ALAM.pdf",
+  socialLinks: [
+    { platform: "linkedin", url: "https://www.linkedin.com/in/rajibbinalam/" },
+    { platform: "github", url: "https://github.com/rajibbinalam" },
+    { platform: "twitter", url: "https://twitter.com/rajibbinalam" },
+    { platform: "facebook", url: "https://www.facebook.com/imrba" },
+  ],
   skills: [
-    { name: "React JS", percent: 90 },
-    { name: "Web Design & Development", percent: 95 },
-    { name: "PHP", percent: 85 },
-    { name: "Laravel", percent: 75 },
-    { name: "JAVA", percent: 25 },
+    { name: "React JS", percent: 90, color: "199 89% 48%" },
+    { name: "Web Design & Development", percent: 95, color: "280 68% 60%" },
+    { name: "PHP", percent: 85, color: "240 64% 58%" },
+    { name: "Laravel", percent: 75, color: "0 72% 51%" },
+    { name: "JAVA", percent: 25, color: "28 80% 52%" },
   ],
   stats: [
     { value: "15+", label: "Projects Completed" },
@@ -93,6 +99,26 @@ export const portfolioData = {
       title: "Game Store App Concept",
       tech: "React JS + Laravel",
       image: "https://rajibbinalam.netlify.app/images/works/6.svg",
+    },
+  ],
+  blogs: [
+    {
+      title: "5 Best App Development Tool for Your Project",
+      date: "09 February, 2020",
+      category: "Reviews",
+      image: "https://rajibbinalam.netlify.app/images/blog/1.svg",
+    },
+    {
+      title: "Common Misconceptions About Payment",
+      date: "07 February, 2020",
+      category: "Tutorial",
+      image: "https://rajibbinalam.netlify.app/images/blog/2.svg",
+    },
+    {
+      title: "3 Things To Know About Startup Business",
+      date: "06 February, 2020",
+      category: "Business",
+      image: "https://rajibbinalam.netlify.app/images/blog/3.svg",
     },
   ],
 
