@@ -3,7 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { districts, District, divisionColors } from "@/data/districts";
 
-const BangladeshMap = () => {
+interface BangladeshMapProps {
+  highlightDistricts?: string[];
+}
+
+const BangladeshMap = ({ highlightDistricts }: BangladeshMapProps) => {
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
   const svgContainerRef = useRef<HTMLDivElement>(null);
@@ -11,7 +15,6 @@ const BangladeshMap = () => {
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
   const [svgLoaded, setSvgLoaded] = useState(false);
 
-  // Load SVG inline and style it
   useEffect(() => {
     fetch("/bangladesh-map.svg")
       .then((r) => r.text())
@@ -22,28 +25,23 @@ const BangladeshMap = () => {
         if (svgEl) {
           svgEl.setAttribute("width", "100%");
           svgEl.setAttribute("height", "100%");
-          svgEl.style.maxHeight = "80vh";
+          svgEl.style.maxHeight = "70vh";
 
-          // Style all paths
           const paths = svgEl.querySelectorAll("path");
           paths.forEach((p) => {
             const cls = p.getAttribute("class") || "";
             if (cls.includes("cls-14") || cls.includes("cls-12") || cls.includes("cls-13")) {
-              // Boundary / divider paths
               p.style.fill = "none";
               p.style.stroke = "hsl(160, 40%, 25%)";
               p.style.strokeWidth = cls.includes("cls-14") ? "3" : "1";
               p.style.opacity = "0.6";
             } else if (cls.includes("cls-10")) {
-              // Tiny/empty paths
               p.style.fill = "none";
               p.style.stroke = "none";
             } else if (cls.includes("cls-18")) {
-              // City dots
               p.style.fill = "hsl(160, 80%, 50%)";
               p.style.stroke = "none";
             } else {
-              // District shapes
               p.style.fill = "hsl(160, 30%, 12%)";
               p.style.stroke = "hsl(160, 40%, 22%)";
               p.style.strokeWidth = "1";
@@ -61,16 +59,13 @@ const BangladeshMap = () => {
             }
           });
 
-          // Hide original text
           const texts = svgEl.querySelectorAll("text");
           texts.forEach((t) => (t.style.display = "none"));
 
-          // Hide rects and polygons (decorative)
           svgEl.querySelectorAll("rect, polygon").forEach((el) => {
             (el as SVGElement).style.display = "none";
           });
 
-          // Hide sodipodi
           svgEl.querySelectorAll("sodipodi\\:namedview, [id^='namedview']").forEach((el) => {
             (el as SVGElement).style.display = "none";
           });
@@ -79,32 +74,31 @@ const BangladeshMap = () => {
       });
   }, []);
 
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent) => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      setTooltipPos({
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      });
-    },
-    []
-  );
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    setTooltipPos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  }, []);
+
+  const visibleDistricts = highlightDistricts
+    ? districts.filter((d) => highlightDistricts.includes(d.id))
+    : districts;
 
   return (
     <div className="relative w-full flex justify-center" ref={containerRef} onMouseMove={handleMouseMove}>
-      {/* SVG Map */}
       <div
         ref={svgContainerRef}
         className="relative w-full max-w-2xl map-glow"
-        style={{ minHeight: "400px" }}
+        style={{ minHeight: "350px" }}
       />
 
-      {/* Interactive district dots overlay */}
       {svgLoaded && (
         <div className="absolute inset-0 pointer-events-none">
           <div className="relative w-full max-w-2xl mx-auto h-full">
-            {districts.map((district) => (
+            {visibleDistricts.map((district) => (
               <motion.button
                 key={district.id}
                 className="absolute pointer-events-auto z-10"
@@ -121,7 +115,7 @@ const BangladeshMap = () => {
               >
                 <div className="relative">
                   <div
-                    className="w-2.5 h-2.5 rounded-full border border-primary/50"
+                    className="w-3 h-3 rounded-full border border-primary/50"
                     style={{ backgroundColor: divisionColors[district.division] }}
                   />
                   <div
@@ -138,7 +132,6 @@ const BangladeshMap = () => {
         </div>
       )}
 
-      {/* Tooltip */}
       <AnimatePresence>
         {hoveredDistrict && (
           <motion.div
