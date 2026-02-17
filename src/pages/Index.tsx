@@ -14,7 +14,9 @@ import {
   GraduationCap,
   ChevronRight,
   ExternalLink,
+  Calendar,
 } from "lucide-react";
+import { Linkedin, Github, Twitter, Facebook } from "lucide-react";
 import BangladeshMap from "@/components/BangladeshMap";
 import { districts } from "@/data/districts";
 import { portfolioData } from "@/data/portfolio";
@@ -33,6 +35,13 @@ const serviceIcons: Record<string, React.ReactNode> = {
   headphones: <Headphones className="w-6 h-6" />,
 };
 
+const socialIcons: Record<string, React.ReactNode> = {
+  linkedin: <Linkedin className="w-5 h-5" />,
+  github: <Github className="w-5 h-5" />,
+  twitter: <Twitter className="w-5 h-5" />,
+  facebook: <Facebook className="w-5 h-5" />,
+};
+
 const Index = () => {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
@@ -49,6 +58,26 @@ const Index = () => {
       d.division.toLowerCase().includes(search.toLowerCase())
   );
 
+  const SocialLinks = ({ size = "default" }: { size?: "default" | "small" }) => (
+    <div className="flex items-center gap-3">
+      {p.socialLinks.map((link) => (
+        <a
+          key={link.platform}
+          href={link.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`${
+            size === "small" ? "w-8 h-8" : "w-10 h-10"
+          } rounded-lg bg-secondary hover:bg-primary/20 text-muted-foreground hover:text-primary flex items-center justify-center transition-all duration-200`}
+        >
+          {size === "small"
+            ? <span className="[&_svg]:w-4 [&_svg]:h-4">{socialIcons[link.platform]}</span>
+            : socialIcons[link.platform]}
+        </a>
+      ))}
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-background">
       {/* Navbar */}
@@ -58,7 +87,7 @@ const Index = () => {
             R<span className="text-primary">.</span>
           </span>
           <div className="hidden md:flex items-center gap-6 text-sm font-body">
-            {["About", "Skills", "Services", "Experience", "Works", "Map", "Contact"].map(
+            {["About", "Skills", "Services", "Experience", "Works", "Map", "Blog", "Contact"].map(
               (s) => (
                 <a
                   key={s}
@@ -108,13 +137,16 @@ const Index = () => {
             <p className="text-muted-foreground mt-3 text-base md:text-lg font-body max-w-lg">
               {p.tagline}
             </p>
-            <div className="flex items-center gap-4 mt-6">
+            <div className="flex items-center gap-4 mt-4">
               <a
                 href={`mailto:${p.email}`}
                 className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
               >
                 <Mail className="w-4 h-4" /> {p.email}
               </a>
+            </div>
+            <div className="mt-5">
+              <SocialLinks />
             </div>
           </motion.div>
         </div>
@@ -160,7 +192,8 @@ const Index = () => {
                   </div>
                   <div className="w-full h-2 bg-secondary rounded-full overflow-hidden">
                     <motion.div
-                      className="h-full bg-primary rounded-full"
+                      className="h-full rounded-full"
+                      style={{ backgroundColor: `hsl(${skill.color})` }}
                       initial={{ width: 0 }}
                       whileInView={{ width: `${skill.percent}%` }}
                       viewport={{ once: true }}
@@ -370,8 +403,47 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Blog */}
+      <section id="blog" className="py-16 px-4">
+        <div className="max-w-5xl mx-auto">
+          <motion.div {...fadeUp}>
+            <h2 className="font-display text-2xl font-bold text-foreground mb-8">
+              Latest <span className="text-primary">Posts</span>
+            </h2>
+            <div className="grid md:grid-cols-3 gap-4">
+              {p.blogs.map((blog) => (
+                <div
+                  key={blog.title}
+                  className="group bg-card border border-border rounded-lg overflow-hidden hover:border-primary/40 transition-colors"
+                >
+                  <div className="aspect-[16/10] bg-secondary overflow-hidden">
+                    <img
+                      src={blog.image}
+                      alt={blog.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <div className="p-4">
+                    <span className="inline-block text-[10px] font-body bg-primary/10 text-primary px-2 py-0.5 rounded-full mb-2">
+                      {blog.category}
+                    </span>
+                    <h3 className="font-display text-sm font-semibold text-foreground leading-tight group-hover:text-primary transition-colors">
+                      {blog.title}
+                    </h3>
+                    <div className="flex items-center gap-1.5 mt-2 text-muted-foreground">
+                      <Calendar className="w-3 h-3" />
+                      <span className="text-[11px] font-body">{blog.date}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Contact */}
-      <section id="contact" className="py-16 px-4">
+      <section id="contact" className="py-16 px-4 bg-card/30">
         <div className="max-w-4xl mx-auto">
           <motion.div {...fadeUp}>
             <h2 className="font-display text-2xl font-bold text-foreground mb-8">
@@ -413,10 +485,13 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="text-center py-8 border-t border-border">
-        <p className="text-xs text-muted-foreground">
-          © {new Date().getFullYear()} {p.name} • Built with ❤️
-        </p>
+      <footer className="py-8 border-t border-border">
+        <div className="max-w-4xl mx-auto px-4 flex flex-col items-center gap-4">
+          <SocialLinks size="small" />
+          <p className="text-xs text-muted-foreground">
+            © {new Date().getFullYear()} {p.name} • Built with ❤️
+          </p>
+        </div>
       </footer>
     </div>
   );
