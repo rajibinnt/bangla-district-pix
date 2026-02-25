@@ -9,7 +9,7 @@ export const portfolioData = {
   leadership in team settings and a proven ability to communicate effectively with both technical teams and
   clients.`,
   email: "rajibbinalam@gmail.com",
-  phone: "01767740561",
+  phone: "01518418928",
   resumeUrl: "https://rajibbinalam.netlify.app/files/RAJIB_BIN_ALAM.pdf",
   socialLinks: [
     { platform: "linkedin", url: "https://www.linkedin.com/in/rajibbinalam/" },
@@ -18,10 +18,11 @@ export const portfolioData = {
     { platform: "facebook", url: "https://www.facebook.com/imrba" },
   ],
   skills: [
-    { name: "React JS", percent: 90, color: "199 89% 48%" },
-    { name: "Web Design & Development", percent: 95, color: "280 68% 60%" },
     { name: "PHP", percent: 85, color: "240 64% 58%" },
-    { name: "Laravel", percent: 75, color: "0 72% 51%" },
+    { name: "React JS", percent: 90, color: "199 89% 48%" },
+    { name: "Python", percent: 88, color: "0 72% 51%" },
+    { name: "Laravel", percent: 95, color: "0 72% 51%" },
+    { name: "Web Design & Development", percent: 95, color: "280 68% 60%" },
     { name: "JAVA", percent: 25, color: "28 80% 52%" },
   ],
   stats: [
@@ -52,7 +53,7 @@ export const portfolioData = {
   experience: [
     {
       period: "2022 - Present",
-      title: "Software Developer",
+      title: "Software Engineer",
       description:
         "Currently working with a software company. Development with PHP and Laravel as Back-End and React JS as Front-End.",
       type: "work",
@@ -66,7 +67,7 @@ export const portfolioData = {
   ],
   education: [
     {
-      period: "2022 - Present",
+      period: "2022 - 2026",
       title: "Bachelor's Degree (CSE)",
       description: "Computer Science and Engineering from Green University of Bangladesh.",
       type: "education",
@@ -127,5 +128,5 @@ export const portfolioData = {
   ],
 
   // Districts the user has visited (with photos)
-  visitedDistricts: ["Dhaka", "Chittagong", "Cox's Bazar", "Sylhet", "Rajshahi", "Rangpur"],
+  visitedDistricts: ["Dhaka", "Chittagong", "Cox's Bazar", "Sylhet", "Khulna", "Rangpur", "Khagrachari", "Rangamati", "Sunamganj", "Habiganj", "Netrokona", "Bandarban", "Chandpur", "Pabna", "Brahmanbaria", "Gazipur", "Narsingdi", "Kurigram", "Moulvibazar", "Narayanganj", "Kishoreganj"],
 };
