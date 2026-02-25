@@ -109,9 +109,7 @@ const BangladeshMap = ({ highlightDistricts }: BangladeshMapProps) => {
     });
   }, []);
 
-  const visibleDistricts = highlightDistricts
-    ? districts.filter((d) => highlightDistricts.includes(d.id))
-    : districts;
+  const visibleDistricts = districts;
 
   return (
     <div className="relative w-full flex justify-center" ref={containerRef} onMouseMove={handleMouseMove}>
