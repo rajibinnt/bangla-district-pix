@@ -3,7 +3,11 @@ export const portfolioData = {
   title: "PHP & Laravel Developer",
   tagline: "Building robust web applications with PHP, Laravel, and React JS",
   about:
-    "Hi, I'm Rajib Bin Alam, Software Developer from Dhaka, Bangladesh. I have rich experience in Web Application Development and Software Development, building and customization with PHP, Laravel and React JS. I find the fastest solutions to tech problems and build robust applications.",
+    `Hi, I'm Rajib Bin Alam, Software Engineer with 3+ years of experience in backend and full-stack development using PHP (Laravel),
+  JavaScript, React.js, and MySQL. Skilled in building REST APIs, optimizing databases, and delivering enterprise
+  applications (POS, HRM, E-commerce). A proactive problem-solver and analytical thinker with demonstrated
+  leadership in team settings and a proven ability to communicate effectively with both technical teams and
+  clients.`,
   email: "rajibbinalam@gmail.com",
   phone: "01767740561",
   resumeUrl: "https://rajibbinalam.netlify.app/files/RAJIB_BIN_ALAM.pdf",
